@@ -31,7 +31,6 @@ class OAuth2ServerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['config']->set('oauth2-server-laravel.oauth2', require __DIR__.'/config/oauth2.php');
         $this->bootFilters();
     }
 
@@ -41,6 +40,7 @@ class OAuth2ServerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app['config']->set('oauth2-server-laravel.oauth2', require __DIR__.'/config/oauth2.php');
         $this->registerAuthorizer();
         $this->registerFilterBindings();
         $this->registerCommands();
