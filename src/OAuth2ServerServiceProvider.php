@@ -33,7 +33,7 @@ class OAuth2ServerServiceProvider extends ServiceProvider
      */
     public function boot(Handler $handler)
     {
-        $this->package('lucadegasperi/oauth2-server-laravel', 'oauth2-server-laravel', __DIR__.'/');
+        $this->app['config']->set('oauth2-server-laravel.oauth2', __DIR__.'/config/oauth2.php');
         $this->registerErrorHandlers($handler);
         $this->bootFilters();
     }
@@ -56,7 +56,7 @@ class OAuth2ServerServiceProvider extends ServiceProvider
     public function registerAuthorizer()
     {
         $this->app->bindShared('oauth2-server.authorizer', function ($app) {
-            $config = $app['config']->get('oauth2-server-laravel::oauth2');
+            $config = $app['config']->get('oauth2-server-laravel.oauth2');
             $issuer = $app->make('League\OAuth2\Server\AuthorizationServer')
                           ->setClientStorage($app->make('League\OAuth2\Server\Storage\ClientInterface'))
                           ->setSessionStorage($app->make('League\OAuth2\Server\Storage\SessionInterface'))
@@ -115,7 +115,7 @@ class OAuth2ServerServiceProvider extends ServiceProvider
         });
 
         $this->app->bindShared('LucaDegasperi\OAuth2Server\Filters\OAuthFilter', function ($app) {
-            $httpHeadersOnly = $app['config']->get('oauth2-server-laravel::oauth2.http_headers_only');
+            $httpHeadersOnly = $app['config']->get('oauth2-server-laravel.oauth2.http_headers_only');
             return new OAuthFilter($app['oauth2-server.authorizer'], $httpHeadersOnly);
         });
 
